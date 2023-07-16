@@ -64,10 +64,23 @@ services:
       - ${SERVER_PORT}:${SERVER_PORT}
       - ${HOST_PORT}:${HOST_PORT}
 
+  discord:
+    build: discord
+    depends_on:
+      - bancho
+    volumes:
+      - discord:/bot/assets/skins
+    environment:
+      BOT_TOKEN: ${DISCORD_BOT_TOKEN}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASS}
+      MYSQL_DATABASE: ${DB_NAME}
+
 volumes:
   data:
   mysql:
   redis:
+  discord:
 
 networks:
   default:
