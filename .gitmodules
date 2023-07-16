@@ -1,0 +1,9 @@
+[submodule "bancho"]
+	path = bancho
+	url = git@github.com:kingdom5500/bancho.py.git
+[submodule "web"]
+	path = web
+	url = git@github.com:kingdom5500/web.bancho.py.git
+[submodule "discord"]
+	path = discord
+	url = git@github.com:kingdom5500/discord.bancho.py.git
