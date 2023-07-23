@@ -39,6 +39,11 @@ services:
     volumes:
       - data:/home/bpyuser/.data
       - .env:/home/bpyuser/.env:ro
+    healthcheck:
+      test: "curl -f http://c.${DOMAIN} --resolve 'c.${DOMAIN}:${SERVER_PORT}:127.0.0.1'"
+      interval: 10s
+      timeout: 4s
+      retries: 10
 
   web:
     build: web
@@ -67,7 +72,8 @@ services:
   discord:
     build: discord
     depends_on:
-      - bancho
+      bancho:
+        condition: service_healthy
     volumes:
       - discord:/bot/assets/skins
     environment:
