@@ -72,9 +72,7 @@ services:
       - discord:/bot/assets/skins
     environment:
       BOT_TOKEN: ${DISCORD_BOT_TOKEN}
-      MYSQL_USER: ${DB_USER}
-      MYSQL_PASSWORD: ${DB_PASS}
-      MYSQL_DATABASE: ${DB_NAME}
+      DOMAIN: ${DOMAIN}
 
 volumes:
   data:
