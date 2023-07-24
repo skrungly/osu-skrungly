@@ -29,7 +29,9 @@ services:
       - REDIS_PASSWORD=${REDIS_PASS}
 
   bancho:
-    build: bancho
+    build:
+      context: bancho
+      dockerfile: ./docker/banchopy/Dockerfile
     depends_on:
       mysql:
         condition: service_healthy
