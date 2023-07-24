@@ -80,6 +80,7 @@ services:
       - discord:/bot/assets/skins
     environment:
       BOT_TOKEN: ${DISCORD_BOT_TOKEN}
+      MAP_DL_MIRROR: ${MIRROR_DOWNLOAD_ENDPOINT}
       DOMAIN: ${DOMAIN}
 
 volumes:
