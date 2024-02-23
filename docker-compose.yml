@@ -40,8 +40,8 @@ services:
     tty: true
     init: true
     volumes:
-      - data:/home/bpyuser/.data
-      - .env:/home/bpyuser/.env:ro
+      - ./bancho:/srv/root
+      - data:/srv/root/.data
     environment:
       - APP_HOST=${APP_HOST}
       - APP_PORT=${APP_PORT}
