@@ -57,6 +57,10 @@ server {
 		default_type image/png;
 		root /.data/assets;
 	}
+
+	location /skins/ {
+		root /srv/skins/osk;
+	}
 }
 
 server {

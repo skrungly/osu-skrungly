@@ -104,6 +104,7 @@ services:
       - ${SSL_CERT_PATH}:/etc/ssl/certs/bancho.pem:ro
       - ${SSL_KEY_PATH}:/etc/ssl/private/bancho.key:ro
       - data:/.data:ro
+      - discord:/srv/skins:ro
     ports:
       - ${APP_PORT}:${APP_PORT}
       - ${HOST_PORT}:${HOST_PORT}
