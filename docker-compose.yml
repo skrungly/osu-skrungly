@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   mysql:
     image: mysql:latest
@@ -105,9 +103,6 @@ services:
       - ${SSL_KEY_PATH}:/etc/ssl/private/bancho.key:ro
       - data:/.data:ro
       - discord:/srv/skins:ro
-    ports:
-      - ${APP_PORT}:${APP_PORT}
-      - ${HOST_PORT}:${HOST_PORT}
 
   discord:
     build: discord
@@ -121,12 +116,15 @@ services:
       MAP_DL_MIRROR: ${MIRROR_DOWNLOAD_ENDPOINT}
       DOMAIN: ${DOMAIN}
 
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    command: tunnel run
+    restart: unless-stopped
+    environment:
+      TUNNEL_TOKEN: ${TUNNEL_TOKEN}
+
 volumes:
   data:
   mysql:
   redis:
   discord:
-
-networks:
-  default:
-    name: osu_network
