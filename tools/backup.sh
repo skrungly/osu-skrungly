@@ -33,7 +33,7 @@ echo "info: ensuring that mysql is running..."
 MYSQL_CONTAINER=$(docker ps -qf "name=${COMPOSE_NAME}-mysql-1")
 if [ -z $MYSQL_CONTAINER ]
   then
-    docker-compose up --wait mysql
+    docker compose up -d --wait mysql
 fi
 
 echo "info: dumping mysql tables..."
@@ -45,7 +45,7 @@ docker exec -e MYSQL_PWD=$DB_PASS ${COMPOSE_NAME}-mysql-1 \
 if [ -z MYSQL_CONTAINER ]
   then
     echo "info: mysql wasn't running before. stopping..."
-    docker-compose stop mysql
+    docker compose stop mysql
 fi
 
 backups=$(ls -ld $CATEGORY_DIR/*/ | wc -l)
@@ -53,7 +53,7 @@ if [ $backups -gt $RETAIN_AMOUNT ]
   then
     let "to_delete = $backups - $RETAIN_AMOUNT"
     echo "info: purging $to_delete oldest backup(s)..."
-    rm -rf $(ls -d --sort=name $CATEGORY_DIR/*/ | head -$to_delete)
+    rm -rf $(ls -d $CATEGORY_DIR/*/ | head -$to_delete)
 fi
 
 echo "info: done!"
