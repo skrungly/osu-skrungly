@@ -51,7 +51,7 @@ fi
 backups=$(ls -ld $CATEGORY_DIR/*/ | wc -l)
 if [ $backups -gt $RETAIN_AMOUNT ]
   then
-    let "to_delete = $backups - $RETAIN_AMOUNT"
+    to_delete=$((backups - $RETAIN_AMOUNT))
     echo "info: purging $to_delete oldest backup(s)..."
     rm -rf $(ls -d $CATEGORY_DIR/*/ | head -$to_delete)
 fi
