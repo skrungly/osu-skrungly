@@ -1,33 +1,25 @@
 #! /bin/sh
 
-if [ -z "$1" ]
+CATEGORY_NAME=$1
+RETAIN_AMOUNT=$2
+
+if [ -z "$CATEGORY_NAME" ]
   then
     echo "error: expected argument <category> (e.g. 'daily')"
     exit 1
-fi
-
-if [ -z "$2" ]
-  then
-    RETAIN_AMOUNT=7
-else
-    RETAIN_AMOUNT=$2
 fi
 
 # assigns DB_USER, DB_PASS, DB_NAME from .env
 eval "$(grep 'DB_.*=.*' .env)"
 COMPOSE_NAME=$(basename $(pwd))
 
-CATEGORY_DIR="./backups/$1"
-BACKUP_DIR="$CATEGORY_DIR/$(date +%s)"
+CATEGORY_DIR="./backups/$CATEGORY_NAME"
+BACKUP_DIR=$CATEGORY_DIR/$(date +%s)
 mkdir -p "$BACKUP_DIR"
 
 echo "info: creating backup to $BACKUP_DIR..."
 echo "info: archiving bancho .data dir..."
-docker run --rm \
-    --volumes-from $(docker ps -aqf "name=${COMPOSE_NAME}-bancho-1") \
-    -v "$BACKUP_DIR":/backup \
-    alpine \
-    tar cf backup/data.tar srv/root/.data
+docker cp $COMPOSE_NAME-bancho-1:/srv/root/.data $BACKUP_DIR/.data
 
 echo "info: ensuring that mysql is running..."
 MYSQL_CONTAINER=$(docker ps -qf "name=${COMPOSE_NAME}-mysql-1")
@@ -48,12 +40,15 @@ if [ -z MYSQL_CONTAINER ]
     docker compose stop mysql
 fi
 
-backups=$(ls -ld $CATEGORY_DIR/*/ | wc -l)
-if [ $backups -gt $RETAIN_AMOUNT ]
+if [ -n "$RETAIN_AMOUNT" ]
   then
-    to_delete=$((backups - $RETAIN_AMOUNT))
-    echo "info: purging $to_delete oldest backup(s)..."
-    rm -rf $(ls -d $CATEGORY_DIR/*/ | head -$to_delete)
+    backups=$(ls -ld $CATEGORY_DIR/*/ | wc -l)
+    if [ $backups -gt $RETAIN_AMOUNT ]
+      then
+        to_delete=$((backups - $RETAIN_AMOUNT))
+        echo "info: purging $to_delete oldest backup(s)..."
+        rm -rf $(ls -d $CATEGORY_DIR/*/ | head -$to_delete)
+    fi
 fi
 
 echo "info: done!"
