@@ -81,6 +81,7 @@ services:
       interval: 10s
       timeout: 4s
       retries: 10
+    restart: unless-stopped
 
   web:
     build: web
@@ -91,6 +92,7 @@ services:
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASS}
       MYSQL_DATABASE: ${DB_NAME}
+    restart: unless-stopped
 
   nginx:
     image: nginx
@@ -103,6 +105,7 @@ services:
       - ${SSL_KEY_PATH}:/etc/ssl/private/bancho.key:ro
       - data:/.data:ro
       - discord:/srv/skins:ro
+    restart: unless-stopped
 
   discord:
     build: discord
