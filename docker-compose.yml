@@ -83,8 +83,8 @@ services:
       retries: 10
     restart: unless-stopped
 
-  web:
-    build: web
+  api:
+    build: api
     depends_on:
       mysql:
         condition: service_healthy
@@ -94,8 +94,12 @@ services:
       MYSQL_DATABASE: ${DB_NAME}
     restart: unless-stopped
 
+  web:
+    build: web
+    restart: unless-stopped
+
   nginx:
-    image: nginx
+    image: nginx:stable-alpine
     depends_on:
       - bancho
       - web

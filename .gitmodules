@@ -7,3 +7,6 @@
 [submodule "discord"]
 	path = discord
 	url = git@github.com:kingdom5500/discord.bancho.py.git
+[submodule "osu-skrungly-api"]
+	path = api
+	url = git@github.com:skrungly/osu-skrungly-api.git
